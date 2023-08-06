@@ -31,16 +31,21 @@ function handlerClick(evt) {
 
   const createImage = evt.target.dataset.source;
 
-  const originalImage = galleryItems.find(
-    ({ original }) => original === createImage
-  );
   const instance = basicLightbox.create(
-    `<img src="${originalImage.original}" alt="${originalImage.description}">
-`
+    `<img src="${createImage}" alt="${galleryItems.description}">
+`,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", closeModal);
+      },
+    },
+    {
+      onClose: () => {
+        document.removeEventListener("keydown", closeModal);
+      },
+    }
   );
   instance.show();
-
-  document.addEventListener("keydown", closeModal);
 
   function closeModal(evt) {
     if (evt.key === "Escape") instance.close();
